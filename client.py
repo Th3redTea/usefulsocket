@@ -17,10 +17,9 @@ def socket_co():
    f.write('node: ' + str(node) + '\n')
    f.write('version: ' + str(version) + '\n')
    f.write('machine: ' + str(machine) + '\n')
+   f.flush()
    sete = f.readlines() #read lines from the file
    s.send(str(sete))
-   while True:
-       print "Sending..."
    s.close()
    sys.exit() #end the operation
 
