@@ -1,25 +1,32 @@
 #!/usr/bin/python
 import socket
 import platform
-system   = platform.system()
-node     = platform.node()
-release  = platform.release()
-version  = platform.version()
-machine  = platform.machine()
-processor= platform.processor()
+import  sys
 
 
+def socket_co():
+   port = 1060
+   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+   s.connect(('192.168.1.107', port)) # my computer address and the port
+   system = platform.system()
+   node = platform.node()
+   version = platform.version()
+   machine = platform.machine()
+   f = s.makefile("r+") #making file to store information ( as I think it do ) using the makefile()
+   f.write('system: ' + str(system) + '\n')
+   f.write('node: ' + str(node) + '\n')
+   f.write('version: ' + str(version) + '\n')
+   f.write('machine: ' + str(machine) + '\n')
+   sete = f.readlines() #read lines from the file
+   s.send(str(sete))
+   while True:
+       print "Sending..."
+   s.close()
+   sys.exit() #end the operation
 
 
+   def main():
+       socket_co()
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = "192.168.1.107"  # server address
-port = 1060 #server port
-s.connect((host,port))
-s.send('system: '+str(system)+'\n')
-s.send('node: '+str(node)+'\n')
-s.send('release: '+str(release)+'\n')
-s.send('version: '+str(version)+'\n')
-s.send('machine: '+str(machine)+'\n')
-
-s.close()
+   if __name__ == '__main__':
+       main()
