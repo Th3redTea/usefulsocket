@@ -24,8 +24,8 @@ def socket_co():
    sys.exit() #end the operation
 
 
-   def main():
-       socket_co()
+def main():
+   socket_co()
 
-   if __name__ == '__main__':
-       main()
+if __name__ == '__main__':
+   main()
