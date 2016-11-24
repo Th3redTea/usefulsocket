@@ -1,31 +1,48 @@
 #!/usr/bin/python
 import socket
 import platform
-import  sys
+import sys
+import threading
 
+try:
+    def socket_co():
+        global s
+        port = 999
+        host = raw_input('Enter server address: ')
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host, port))
+except socket.error, (value, message):
+    print "Socket error .... please resolve the problem as soon as you can !"
+    s.close()
+    sys.exit()
 
-def socket_co():
-   port = 1060
-   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-   s.connect(('192.168.1.107', port)) # my computer address and the port
-   system = platform.system()
-   node = platform.node()
-   version = platform.version()
-   machine = platform.machine()
-   f = s.makefile("r+") #making file to store information ( as I think it do ) using the makefile()
-   f.write('system: ' + str(system) + '\n')
-   f.write('node: ' + str(node) + '\n')
-   f.write('version: ' + str(version) + '\n')
-   f.write('machine: ' + str(machine) + '\n')
-   f.flush()
-   sete = f.readlines() #read lines from the file
-   s.send(str(sete))
-   s.close()
-   sys.exit() #end the operation
+try:
+    def data():
+        system = platform.system()
+        node = platform.node()
+        version = platform.version()
+        machine = platform.machine()
+        f = s.makefile("r+")  # making file to store information ( as I think it do ) using the makefile()
+        f.write('system: ' + str(system) + '\n')
+        f.write('node: ' + str(node) + '\n')
+        f.write('version: ' + str(version) + '\n')
+        f.write('machine: ' + str(machine) + '\n')
+        f.flush()
+        sete = f.readlines()  # read lines from the file
+        s.send(str(sete))
+        s.close()
+        sys.exit()  # end the operation
+except:
+    print ' Something went wrong .... '
+    s.close()
+    sys.exit()
+
 
 
 def main():
-   socket_co()
+    socket_co()
+    data()
+
 
 if __name__ == '__main__':
-   main()
+    main()
